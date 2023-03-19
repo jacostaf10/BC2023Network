@@ -1,5 +1,5 @@
 # BC2023Network
 
-##BCNetwork
+* ## BCNetwork
 
-Paquete de uso de red que utiliza Async/Await para red.
+  * Paquete de uso de red que utiliza Async/Await.
