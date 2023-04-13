@@ -18,5 +18,12 @@ public final class BCNetwork {
         }
     }
     
+    public func postJSON<JSON: Codable> (url: URL, json: JSON, method: HTTPMethod = .post, statusOK: Int = 200) async throws {
+        let (_, response) = try await URLSession.shared.data(for: .post(url: url, data: json, httpMethod: .put))
+        guard let response = response as? HTTPURLResponse else { throw NetworkError.noHTTP}
+        if response.statusCode != statusOK {
+            throw NetworkError.status(response.statusCode)
+        }
+    }
     
 }
