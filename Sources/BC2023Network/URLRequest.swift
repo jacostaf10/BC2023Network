@@ -18,8 +18,11 @@ public enum HTTPMethod: String {
 
 
 public extension URLRequest {
-    public static func get(url: URL) -> URLRequest {
+    public static func get(url: URL, token: String? = nil) -> URLRequest {
         var request = URLRequest(url: url)
+        if let token {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
         request.timeoutInterval = 30
         request.httpMethod = HTTPMethod.get.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -27,8 +30,11 @@ public extension URLRequest {
         return request
     }
     
-    public static func post<JSON: Codable>(url: URL, data: JSON, httpMethod: HTTPMethod = .post) -> URLRequest {
+    public static func post<JSON: Codable>(url: URL, data: JSON, httpMethod: HTTPMethod = .post, token: String? = nil) -> URLRequest {
         var request = URLRequest(url: url)
+        if let token {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
         request.timeoutInterval = 30
         request.httpMethod = httpMethod.rawValue
         request.setValue("application/json; charset=utf8", forHTTPHeaderField: "Content-Type")
