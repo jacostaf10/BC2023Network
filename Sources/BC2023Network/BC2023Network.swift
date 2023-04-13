@@ -4,8 +4,8 @@ public final class BCNetwork {
     
     public static let shared = BCNetwork()
     
-    public func getJSON<JSON: Codable>(url: URL, type: JSON.Type) async throws -> JSON {
-        let (data, response) = try await URLSession.shared.dataRequest(from: url)
+    public func getJSON<JSON: Codable>(request: URLRequest, type: JSON.Type) async throws -> JSON {
+        let (data, response) = try await URLSession.shared.dataRequest(for: request)
         guard let res = response as? HTTPURLResponse else {throw NetworkError.noHTTP}
         if res.statusCode == 200 {
             do {
@@ -18,8 +18,8 @@ public final class BCNetwork {
         }
     }
     
-    public func postJSON<JSON: Codable> (url: URL, json: JSON, method: HTTPMethod = .post, statusOK: Int = 200) async throws {
-        let (_, response) = try await URLSession.shared.data(for: .post(url: url, data: json, httpMethod: .put))
+    public func postJSON<JSON: Codable> (request: URLRequest, json: JSON, statusOK: Int = 200) async throws {
+        let (_, response) = try await URLSession.shared.dataRequest(for: request)
         guard let response = response as? HTTPURLResponse else { throw NetworkError.noHTTP}
         if response.statusCode != statusOK {
             throw NetworkError.status(response.statusCode)

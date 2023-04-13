@@ -15,6 +15,14 @@ public extension URLSession {
             throw NetworkError.general(error)
         }
     }
+    
+    func dataRequest(for request: URLRequest) async throws -> (Data, URLResponse) {
+        do {
+            return try await data(for: request)
+        } catch {
+            throw NetworkError.general(error)
+        }
+    }
 }
 
 
