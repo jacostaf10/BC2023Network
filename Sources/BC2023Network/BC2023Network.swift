@@ -1,4 +1,4 @@
-import Foundation
+import SwiftUI
 
 public final class BCNetwork {
     
@@ -25,5 +25,21 @@ public final class BCNetwork {
             throw NetworkError.status(response.statusCode)
         }
     }
+    #if os(iOS)
+    public func getImage(url: URL) async throws -> UIImage {
+        let (data, response) = try await URLSession.shared.dataRequest(from: url)
+        guard let res = response as? HTTPURLResponse else {throw NetworkError.noHTTP}
+        if res.statusCode == 200 {
+            if let image = UIImage(data: data) {
+                return image
+            } else {
+                throw NetworkError.dataNotValid
+            }
+            
+        } else {
+            throw NetworkError.status(res.statusCode)
+        }
+    }
+    #endif
     
 }
