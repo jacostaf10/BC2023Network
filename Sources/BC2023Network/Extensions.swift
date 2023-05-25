@@ -32,6 +32,7 @@ public enum NetworkError: Error, CustomStringConvertible {
     case json(Error)
     case dataNotValid
     case noHTTP
+    case vapor(String)
     case unknown
     
     public var description: String {
@@ -46,6 +47,8 @@ public enum NetworkError: Error, CustomStringConvertible {
             return "Data Not Valid"
         case .noHTTP:
             return "No es conexion HTTP"
+        case .vapor(let reason):
+            return reason
         case .unknown:
             return "Desconocido"
         }
