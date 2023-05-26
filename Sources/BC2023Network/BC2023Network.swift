@@ -23,6 +23,20 @@ public final class BCNetwork {
         }
     }
     
+    public func getJSONV<JSON: Codable>(request: URLRequest, type: JSON.Type, decoder: JSONDecoder = JSONDecoder(), statusOK: Int = 200) async throws -> JSON {
+        let (data, response) = try await URLSession.shared.dataRequest(for: request)
+        guard let res = response as? HTTPURLResponse else {throw NetworkError.noHTTP}
+        if res.statusCode == statusOK {
+            do {
+                return try decoder.decode(JSON.self, from: data)
+            } catch {
+                throw NetworkError.json(error)
+            }
+        } else {
+            throw NetworkError.vapor(try JSONDecoder().decode(VaporError.self, from: data).reason)
+        }
+    }
+    
     public func post(request: URLRequest, statusOK: Int = 200) async throws {
         let (_, response) = try await URLSession.shared.dataRequest(for: request)
         guard let response = response as? HTTPURLResponse else { throw NetworkError.noHTTP}
