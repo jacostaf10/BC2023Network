@@ -17,7 +17,7 @@ public enum HTTPMethod: String {
 
 public enum AuthorizationMethod: String {
     case token = "Bearer"
-    case basic = "B"
+    case basic = "Basic"
 }
 
 
