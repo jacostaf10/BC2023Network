@@ -33,7 +33,7 @@ public final class BCNetwork {
                 throw NetworkError.json(error)
             }
         } else {
-            throw NetworkError.vapor(try JSONDecoder().decode(VaporError.self, from: data).reason)
+            throw NetworkError.vapor(try JSONDecoder().decode(VaporError.self, from: data).reason, res.statusCode)
         }
     }
     
@@ -50,7 +50,7 @@ public final class BCNetwork {
             let (data, response) = try await URLSession.shared.data(for: request)
             guard let response = response as? HTTPURLResponse else { throw NetworkError.noHTTP}
             if response.statusCode != statusOK {
-                throw NetworkError.vapor(try JSONDecoder().decode(VaporError.self, from: data).reason)
+                throw NetworkError.vapor(try JSONDecoder().decode(VaporError.self, from: data).reason, response.statusCode)
             }
         } catch {
             
